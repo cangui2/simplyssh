@@ -106,7 +106,6 @@ func sshConfig(usernamme, path string) *ssh.ClientConfig {
 		
 	}
 	return sshConfig
-
 }
 func PublicKeyFile(file string) ssh.AuthMethod {
 	fmt.Println(file)
@@ -252,4 +251,16 @@ func DownloadFile(sftpClient *sftp.Client, remoteFilePath, localFilePath string)
 
     fmt.Println("\nTéléchargement terminé:", localFilePath)
     return nil
+}
+func ExecuteCommand(command string,session *ssh.Session){
+    // initialisation du buffer pour recupere les infos reçu de l' hôte
+    var b bytes.Buffer
+    session.Stdout = &b
+    if err := session.Run(command); err != nil {
+        fmt.Println(b)
+        log.Fatal("Failed cmd: ", err)
+
+    }
+    fmt.Println(b)
+
 }
